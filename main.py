@@ -134,12 +134,8 @@ def donate(current_user):
 
     return jsonify({'message': f'Donated {amount} to {company.name}'})
 
-# @app.route('/admin/register_company')
 # @app.route('/admin/delcompany')
 
-
-# @app.route('/company_dashboard')
-# @token_required
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -204,6 +200,25 @@ def add_company(current_user):
     db.session.commit()
 
     return jsonify({'message': f'Company {name} added successfully'}), 201
+
+@app.route('/admin/remove_company/<int:company_id>', methods=['DELETE'])
+@token_required
+def remove_company(current_user, company_id):
+    # Check if the user is an admin
+    if current_user.is_admin != '1':  # Assuming '1' indicates admin
+        return jsonify({'message': 'Admin access required'}), 403
+
+    # Find the company by ID
+    company = Company.query.get(company_id)
+    
+    if not company:
+        return jsonify({'message': 'Company not found'}), 404
+
+    # Remove the company from the database
+    db.session.delete(company)
+    db.session.commit()
+
+    return jsonify({'message': f'Company {company.name} removed successfully'}), 200
 
 if __name__=="__main__":
     app.run(debug=True)
