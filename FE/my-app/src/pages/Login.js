@@ -25,7 +25,8 @@ function Login() {
       setLoading(true);
       const response = await Login(loginObj.username, loginObj.password);
       if (response.data.token) {
-        localStorage.setItem('token', 'DummyTokenHere');
+        console.log(response.data)
+        localStorage.setItem('token', response.data.token);
         navigate(`/search-result`);
       } else {
         setErrorMessage(response.data.message);
