@@ -26,7 +26,7 @@ function Login() {
       const response = await Login(loginObj.username, loginObj.password);
       if (response.data.token) {
         localStorage.setItem('token', 'DummyTokenHere');
-        navigate(`/startup/${response.data.id}`);
+        navigate(`/search-result`);
       } else {
         setErrorMessage(response.data.message);
       }
@@ -39,7 +39,7 @@ function Login() {
   };
 
   const Login = async (email, password) => {
-    const res = await api.post('/token', { username: email, password });
+    const res = await api.post('/login', { username: email, password });
     return res;
   };
 

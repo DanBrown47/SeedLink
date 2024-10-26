@@ -20,10 +20,11 @@ from pytz import timezone
 from decorators import token_required
 from extensions import db 
 from sqlalchemy.exc import IntegrityError
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 from config import SECRET_KEY
@@ -205,7 +206,7 @@ def add_company(current_user):
 @token_required
 def remove_company(current_user, company_id):
     # Check if the user is an admin
-    if current_user.is_admin != '1':  # Assuming '1' indicates admin
+    if current_user.is_admin != 'x':  # Assuming '1' indicates admin
         return jsonify({'message': 'Admin access required'}), 403
 
     # Find the company by ID
@@ -221,4 +222,4 @@ def remove_company(current_user, company_id):
     return jsonify({'message': f'Company {company.name} removed successfully'}), 200
 
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
