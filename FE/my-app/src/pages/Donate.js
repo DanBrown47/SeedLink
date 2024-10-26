@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Typography, Box, Button, TextField, Paper, InputAdornment } from '@mui/material';
+import { Container, Typography, Box, Button, TextField, Paper, InputAdornment, Snackbar, Alert } from '@mui/material';
 import api from '../services/api.js';
 import Header from './parts/Header';
+
 
 function Donate() {
   const { id } = useParams();
@@ -17,7 +18,7 @@ function Donate() {
     donation: 10,
   });
   const [selectedAmount, setSelectedAmount] = useState(100);
-  console.warn('Slected', selectedAmount);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State to control Snackbar
 
   const donationOptions = [100, 500, 1000, 2000];
 
@@ -49,12 +50,13 @@ function Donate() {
           },
         }
       );
+      
       console.log('Donation successful:', res.data);
+      setSnackbarOpen(true); // Open Snackbar on successful donation
     } catch (error) {
       console.error('Error processing donation:', error);
     }
   };
-  
 
   useEffect(() => {
     fetchStartupData();
@@ -113,6 +115,17 @@ function Donate() {
           </Typography>
         </Paper>
       </Box>
+      {/* Snackbar for successful donation */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
+          Donation successful! Thank you for your support.
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

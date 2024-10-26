@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Container, Typography, TextField, Button, Paper } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function HeroHome() {
   return (
@@ -23,7 +24,7 @@ function HeroHome() {
               <Box display="flex" alignItems="center" mt={3} sx={{ backgroundColor: 'white', borderRadius: 1, p: 1 }}>
                 <TextField
                   variant="outlined"
-                  placeholder="Search your company name"
+                  placeholder="Ignition"
                   fullWidth
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -43,7 +44,7 @@ function HeroHome() {
                     borderRadius: 2,
                   }}
                 >
-                  Search
+                  <ArrowForwardIcon/>
                 </Button>
               </Box>
             </form>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api.js';
 import Header from './parts/Header';
 import { Container, Typography, TextField, Button, Grid, Card, CardContent, Box } from '@mui/material';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 
 function SearchResult() {
     const [startups, setStartups] = useState([]);
@@ -43,7 +44,7 @@ function SearchResult() {
                                     color: 'blue.500',
                                 }}
                             >
-                                ST
+                                <ApartmentIcon/>    
                             </Box>
                         </Box>
                         <Typography variant="h6" align="center" sx={{ mt: 2, color: 'text.secondary' }}>
@@ -85,7 +86,7 @@ function SearchResult() {
                         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
                             <TextField
                                 variant="outlined"
-                                placeholder="Search your company name"
+                                placeholder="Search"
                                 sx={{ flexGrow: 1, mr: 2 }}
                             />
                             <Button variant="contained" color="primary">
