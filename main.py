@@ -27,6 +27,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['CORS_HEADERS'] = 'Content-Type'
 from config import SECRET_KEY
 app.config['SECRET_KEY'] = SECRET_KEY
 db.init_app(app)
@@ -186,8 +187,9 @@ def login():
     else:
         return jsonify({'message': 'Invalid username or password'}), 401
     
-@app.route('/admin/add_company', methods=['POST'])
+@app.route('/add_company', methods=['POST'])
 @token_required
+@cross_origin()
 def add_company(current_user):
     # Check if the user is an admin
     if current_user.is_admin != 'x':
