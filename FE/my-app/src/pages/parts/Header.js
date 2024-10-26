@@ -72,6 +72,22 @@ function Header() {
         >
           Sign in
         </Link>
+        <Link
+          component={RouterLink}
+          to="/admin/login"
+          underline="none"
+          color="textSecondary"
+          sx={{
+            fontWeight: 'medium',
+            p: 1.5,
+            '&:hover': {
+              color: 'textPrimary',
+            },
+            transition: 'color 0.15s ease-in-out',
+          }}
+        >
+          Admin Login
+        </Link>
 
       </Toolbar>
     </AppBar>

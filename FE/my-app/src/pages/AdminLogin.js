@@ -40,7 +40,7 @@ function AdminLogin() {
   };
 
   const Login = async (email, password) => {
-    const res = await api.post('/token', {
+    const res = await api.post('/login', {
       username: email,
       password: password,
     });

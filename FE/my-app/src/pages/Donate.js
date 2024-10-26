@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Typography, Box, Button, TextField, Paper } from '@mui/material';
+import { Container, Typography, Box, Button, TextField, Paper, InputAdornment } from '@mui/material';
 import api from '../services/api.js';
 import Header from './parts/Header';
 
@@ -16,6 +16,10 @@ function Donate() {
     following: 0,
     donation: 10,
   });
+  const [selectedAmount, setSelectedAmount] = useState(100);
+  console.warn('Slected', selectedAmount);
+
+  const donationOptions = [100, 500, 1000, 2000];
 
   const fetchStartupData = async () => {
     try {
@@ -26,6 +30,32 @@ function Donate() {
     }
   };
 
+  const handleAmountClick = (amount) => {
+    setSelectedAmount(amount);
+  };
+
+  const handlePayNow = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await api.post(
+        `/donate`,
+        {
+          amount: selectedAmount,
+          company_id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('Donation successful:', res.data);
+    } catch (error) {
+      console.error('Error processing donation:', error);
+    }
+  };
+  
+
   useEffect(() => {
     fetchStartupData();
   }, [id]);
@@ -33,7 +63,7 @@ function Donate() {
   return (
     <Container maxWidth="md" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
-      <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
+      <Box component="main" sx={{ flexGrow: 1, py: 8, justifyContent: "center" }}>
         <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h2" color="primary" gutterBottom>
             ₹ {startup.donation}
@@ -41,16 +71,41 @@ function Donate() {
           <Typography variant="body1" color="textSecondary" sx={{ mb: 4 }}>
             Raised so far
           </Typography>
-          <Box sx={{ width: '100%', maxWidth: 320, mb: 2 }}>
+          <Box textAlign="center" p={2} width="100%" maxWidth="300px" m="auto">
+            <Typography variant="h6" gutterBottom>
+              Donation Amount
+            </Typography>
+            <Box display="flex" justifyContent="space-between" mb={2}>
+              {donationOptions.map((amount) => (
+                <Button
+                  key={amount}
+                  variant={selectedAmount === amount ? 'contained' : 'outlined'}
+                  color={selectedAmount === amount ? 'primary' : 'default'}
+                  onClick={() => handleAmountClick(amount)}
+                  sx={{
+                    minWidth: '60px',
+                    borderRadius: 2,
+                    fontWeight: 'bold',
+                    backgroundColor: selectedAmount === amount ? '#1565c0' : 'transparent',
+                    color: selectedAmount === amount ? 'white' : '#000',
+                  }}
+                >
+                  ₹{amount}
+                </Button>
+              ))}
+            </Box>
             <TextField
               fullWidth
               variant="outlined"
-              label="Enter the amount to donate"
-              type="number"
-              placeholder="Enter the amount to donate"
+              value={selectedAmount}
+              onChange={(e) => setSelectedAmount(e.target.value)}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                endAdornment: <InputAdornment position="end">INR</InputAdornment>,
+              }}
             />
           </Box>
-          <Button variant="contained" color="primary" size="large">
+          <Button variant="contained" color="primary" size="large" onClick={handlePayNow}>
             Pay Now!
           </Button>
           <Typography variant="h6" color="textPrimary" sx={{ mt: 2 }}>

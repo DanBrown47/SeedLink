@@ -48,8 +48,13 @@ function NewStartup() {
     };
 
     const createStartup = async (obj) => {
-        obj.jwt = localStorage.getItem('token');
-        const res = await api.post('/add_company', obj);
+        console.warn('OBJ', obj)
+        const token = localStorage.getItem("token");
+        const res = await api.post('/add_company', obj, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+          });
         return res;
     };
 
