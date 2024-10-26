@@ -48,7 +48,6 @@ class Company(db.Model):
     ceo = db.Column(db.String(80), nullable=False)
     cto = db.Column(db.String(80), nullable=False)
     address = db.Column(db.String(80), nullable=False)
-    phone = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), nullable=False)
     website = db.Column(db.String(80), nullable=False)
     following = db.Column(db.Integer(), nullable=False)
@@ -68,6 +67,31 @@ with app.app_context():
     db.create_all()    
     print("Database Initialized")
 
+
+@app.route('/get_company/<int:id>', methods=['GET'])
+def get_specific_company(id):
+    company_details = Company.query.filter_by(id=id).first()
+    
+    if company_details:
+        # Manually construct the JSON response
+        result = {
+            'id': company_details.id,
+            'name': company_details.name,
+            'ceo': company_details.ceo,
+            'cto': company_details.cto,
+            'address': company_details.address,
+            'email': company_details.email,
+            'website': company_details.website,
+            'following': company_details.following,
+            'donation': company_details.donation
+        }
+        return jsonify(result), 200
+    else:
+        # If the company is not found, return a 404 response
+        return jsonify({'error': 'Company not found'}), 404
+
+    
+
 @app.route('/get_all_company', methods=['GET'])
 def get_all_company():
     all_company = Company.query.all()
@@ -80,7 +104,6 @@ def get_all_company():
             'ceo': company.ceo,
             'cto': company.cto,
             'address': company.address,
-            'phone': company.phone,
             'email': company.email,
             'website': company.website,
             'following': company.following,
@@ -175,7 +198,6 @@ def add_company(current_user):
     ceo = data.get('ceo')
     cto = data.get('cto')
     address = data.get('address')
-    phone = data.get('phone')
     email = data.get('email')
     website = data.get('website')   
     following = data.get('following', 0)  # Set default following to 0
@@ -191,7 +213,6 @@ def add_company(current_user):
         ceo=ceo,
         cto=cto,
         address=address,
-        phone=phone,
         email=email,
         website=website,
         following=following,
